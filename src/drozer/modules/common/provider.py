@@ -186,15 +186,17 @@ class Provider(loader.ClassLoader):
             Executes against a content provider's "call" method
             """
 
+            yayutilyay = self.__module.loadClass("common/yayutilyay.apk", "yayutilyay")
+
             client = self.__get_client(uri)
             
             if client == None:
                 raise ReflectionException("Could not get a ContentProviderClient for %s." % uri)
             
-            cursor = None
+            yaycallresultyay = None
             
             try:
-                cursor = client.call(method, argument, bundle)
+                yaycallresultyay = client.call(method, argument, bundle)
             except ReflectionException as e:
 
                 # yaynoteyay
@@ -207,7 +209,7 @@ class Provider(loader.ClassLoader):
             finally:  
                 self.__release(client)
 
-            return cursor
+            return yaycallresultyay
         
         def __get_client(self, uri):
             try:

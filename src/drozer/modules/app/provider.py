@@ -496,4 +496,7 @@ class Call(Module, common.Provider):
                     yaybundleyay.putShort(yayKeyyay[2:], self.arg(yayValueyay, obj_type="short"))
 
         yayencodedyay = self.contentResolver().call(arguments.uri, arguments.method, arguments.argument, yaybundleyay)
-        self.stdout.write(base64.b64decode(yayencodedyay).decode("utf-8", errors="ignore") + "\n")
+
+        yayclassloadyay = self.loadClass("common/yayutilyay.apk", "yayutilyay")
+        yayutilyay = self.new(yayclassloadyay)
+        self.stdout.write("Call result: \n" + str(yayutilyay.bundleToString(yayencodedyay)))
