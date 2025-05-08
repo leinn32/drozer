@@ -464,39 +464,39 @@ class Call(Module, common.Provider):
         
 
     def execute(self, arguments):
-        yaybundleyay = self.new("android.os.Bundle")
+        bundleObject = self.new("android.os.Bundle")
         if arguments.bundle != None:
             # if bundle string ends with `;`, remove last `;`
             if arguments.bundle.endswith(';'):
-                yaybundlestringyay = arguments.bundle[:-1]
+                bundleStringArgument = arguments.bundle[:-1]
             else:
-                yaybundlestringyay = arguments.bundle
+                bundleStringArgument = arguments.bundle
             # parse bundle string
-            yaybundlearrayyay = yaybundlestringyay.split(';')
-            for yayitemyay in yaybundlearrayyay:
-                yayKeyyay = yayitemyay.split('=')[0]
-                yayValueyay = yayitemyay.split('=')[1]
-                if yayKeyyay.startswith("S."):
-                    yaybundleyay.putString(yayKeyyay[2:], self.arg(yayValueyay, obj_type="string"))
-                elif yayKeyyay.startswith("B."):
-                    yaybundleyay.putBoolean(yayKeyyay[2:], self.arg(yayValueyay.lower().startswith('t'), obj_type="boolean"))
-                elif yayKeyyay.startswith("b."):
-                    yaybundleyay.putByte(yayKeyyay[2:], self.arg(yayValueyay, obj_type="byte"))
-                elif yayKeyyay.startswith("c."):
-                    yaybundleyay.putChar(yayKeyyay[2:], self.arg(yayValueyay, obj_type="char"))
-                elif yayKeyyay.startswith("d."):
-                    yaybundleyay.putDouble(yayKeyyay[2:], self.arg(yayValueyay, obj_type="double"))
-                elif yayKeyyay.startswith("i."):
-                    yaybundleyay.putInt(yayKeyyay[2:], self.arg(yayValueyay, obj_type="int"))
-                elif yayKeyyay.startswith("f."):
-                    yaybundleyay.putFloat(yayKeyyay[2:], self.arg(yayValueyay, obj_type="float"))
-                elif yayKeyyay.startswith("l."):
-                    yaybundleyay.putLong(yayKeyyay[2:], self.arg(yayValueyay, obj_type="long"))
-                elif yayKeyyay.startswith("s."):
-                    yaybundleyay.putShort(yayKeyyay[2:], self.arg(yayValueyay, obj_type="short"))
+            bundleArrayArgument = bundleStringArgument.split(';')
+            for bundleArrayItem in bundleArrayArgument:
+                bundleKey = bundleArrayItem.split('=')[0]
+                bundleValue = bundleArrayItem.split('=')[1]
+                if bundleKey.startswith("S."):
+                    bundleObject.putString(bundleKey[2:], self.arg(bundleValue, obj_type="string"))
+                elif bundleKey.startswith("B."):
+                    bundleObject.putBoolean(bundleKey[2:], self.arg(bundleValue.lower().startswith('t'), obj_type="boolean"))
+                elif bundleKey.startswith("b."):
+                    bundleObject.putByte(bundleKey[2:], self.arg(bundleValue, obj_type="byte"))
+                elif bundleKey.startswith("c."):
+                    bundleObject.putChar(bundleKey[2:], self.arg(bundleValue, obj_type="char"))
+                elif bundleKey.startswith("d."):
+                    bundleObject.putDouble(bundleKey[2:], self.arg(bundleValue, obj_type="double"))
+                elif bundleKey.startswith("i."):
+                    bundleObject.putInt(bundleKey[2:], self.arg(bundleValue, obj_type="int"))
+                elif bundleKey.startswith("f."):
+                    bundleObject.putFloat(bundleKey[2:], self.arg(bundleValue, obj_type="float"))
+                elif bundleKey.startswith("l."):
+                    bundleObject.putLong(bundleKey[2:], self.arg(bundleValue, obj_type="long"))
+                elif bundleKey.startswith("s."):
+                    bundleObject.putShort(bundleKey[2:], self.arg(bundleValue, obj_type="short"))
 
-        yayencodedyay = self.contentResolver().call(arguments.uri, arguments.method, arguments.argument, yaybundleyay)
+        yayBundleReturnYay = self.contentResolver().call(arguments.uri, arguments.method, arguments.argument, bundleObject)
 
-        yayclassloadyay = self.loadClass("common/yayutilyay.apk", "yayutilyay")
-        yayutilyay = self.new(yayclassloadyay)
-        self.stdout.write("Call result: \n" + str(yayutilyay.bundleToString(yayencodedyay)))
+        yayClassLoaderYay = self.loadClass("common/HelperUtils.apk", "HelperUtils")
+        helperUtils = self.new(yayClassLoaderYay)
+        self.stdout.write("Call result: \n" + str(helperUtils.bundleToString(yayBundleReturnYay)))
