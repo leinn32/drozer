@@ -437,3 +437,66 @@ class Update(Module, common.Provider):
         self.contentResolver().update(arguments.uri, values, arguments.selection, arguments.selection_args)
 
         self.stdout.write("Done.\n\n")
+
+class Call(Module, common.Provider):
+
+    name = "Call a call in a content provider"
+    description = "Call a call in a content provider"
+    examples = """Assuming that a Content Provider `call` method accepts the method `yaymethodyay`:
+
+    dz> run app.provider.call content://yayauthorityyay
+                --method "yaymethodyay"
+                --argument "yayargumentyay"
+                --bundle "S.yaystringyay=yayvalueyay;B.yaybooleanyay=false"
+
+    Done."""
+    author = "Yogehi (@yogehi) / Malicious Erection LLC"
+    date = "2025-05-07"
+    license = "BSD (3 clause)"
+    path = ["app", "provider"]
+    permissions = ["com.WithSecure.dz.permissions.GET_CONTEXT"]
+
+    def add_arguments(self, parser):
+        parser.add_argument("uri", help="the content provider URI that accepts a 'call'")
+        parser.add_argument("--method", default=None, help="specify an method string")
+        parser.add_argument("--argument", default=None, help="specify an argument string")
+        parser.add_argument("--bundle", default=None, help="specify a bundle extra")
+        
+
+    def execute(self, arguments):
+        bundleObject = self.new("android.os.Bundle")
+        if arguments.bundle != None:
+            # if bundle string ends with `;`, remove last `;`
+            if arguments.bundle.endswith(';'):
+                bundleStringArgument = arguments.bundle[:-1]
+            else:
+                bundleStringArgument = arguments.bundle
+            # parse bundle string
+            bundleArrayArgument = bundleStringArgument.split(';')
+            for bundleArrayItem in bundleArrayArgument:
+                bundleKey = bundleArrayItem.split('=')[0]
+                bundleValue = bundleArrayItem.split('=')[1]
+                if bundleKey.startswith("S."):
+                    bundleObject.putString(bundleKey[2:], self.arg(bundleValue, obj_type="string"))
+                elif bundleKey.startswith("B."):
+                    bundleObject.putBoolean(bundleKey[2:], self.arg(bundleValue.lower().startswith('t'), obj_type="boolean"))
+                elif bundleKey.startswith("b."):
+                    bundleObject.putByte(bundleKey[2:], self.arg(bundleValue, obj_type="byte"))
+                elif bundleKey.startswith("c."):
+                    bundleObject.putChar(bundleKey[2:], self.arg(bundleValue, obj_type="char"))
+                elif bundleKey.startswith("d."):
+                    bundleObject.putDouble(bundleKey[2:], self.arg(bundleValue, obj_type="double"))
+                elif bundleKey.startswith("i."):
+                    bundleObject.putInt(bundleKey[2:], self.arg(bundleValue, obj_type="int"))
+                elif bundleKey.startswith("f."):
+                    bundleObject.putFloat(bundleKey[2:], self.arg(bundleValue, obj_type="float"))
+                elif bundleKey.startswith("l."):
+                    bundleObject.putLong(bundleKey[2:], self.arg(bundleValue, obj_type="long"))
+                elif bundleKey.startswith("s."):
+                    bundleObject.putShort(bundleKey[2:], self.arg(bundleValue, obj_type="short"))
+
+        yayBundleReturnYay = self.contentResolver().call(arguments.uri, arguments.method, arguments.argument, bundleObject)
+
+        yayClassLoaderYay = self.loadClass("common/HelperUtils.apk", "HelperUtils")
+        helperUtils = self.new(yayClassLoaderYay)
+        self.stdout.write("Call result: \n" + str(helperUtils.bundleToString(yayBundleReturnYay)))
